@@ -13,16 +13,18 @@ A simple webservice that exposes 2 routes: GET & POST. Users can upload receipts
 
 1. Start docker desktop.
 
-2. Clone repository and cd into the cloned directory. In your terminal, run the following commands:
+2. Clone repository and cd into the cloned directory. To build the docker image, run the following command:
 
 `docker build . -t receipt-processor-api:1.0`
 
-3. This will build the initial image. To run the image, run the following command:
+3. To start the docker container, run the following command:
 
 `docker run -dp 3000:3000 receipt-processor-api:1.0`
 
 **Note**
-For production builds, in the Dockerfile, comment out the DEV section and comment in the PROD section.
+
+- When running in `NODE_ENV='development'`, this api will run method `insertData` to seed the database with dummy data.
+- For production builds, in the Dockerfile, comment out the DEV section and comment in the PROD section.
 
 ---
 

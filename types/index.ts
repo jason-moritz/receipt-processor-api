@@ -26,7 +26,7 @@ export type Receipt = {
     userID: string
     retailer: string
     retailerID?: string
-    purchaseDate: string
+    purchaseDate: Date
     purchaseTime: number
     total: number
     points?: number

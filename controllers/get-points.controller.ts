@@ -18,7 +18,6 @@ const getPoints = (req: Request, res: Response) => {
         
         console.log(`Record found for id ${id}.`, JSON.stringify(receipt))
         res.json({ points: receipt.points })
-    
     } catch(error: any) {
         console.error(error.message)
         res.json({ message: error.message })

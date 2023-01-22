@@ -7,7 +7,6 @@ import calculatePoints,
   getPointsForTotalItems,
   getPointsForItemsDescription
  } from "../../helper/calculate-points.helper"
-import { Receipt } from "../../types"
 import { testReceipt1, testReceipt2, badReceipt } from "../payloads/receipt.payload"
 
 test('get points for retailer', () => {

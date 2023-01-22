@@ -4,20 +4,21 @@ import moment from 'moment'
 const formatReceipt = (receipt: ReceiptPayload) => {
     try {
         console.log('Attempting to format receipt payload...')
-        // Format date to ISO
-        const formattedDate = moment(receipt.purchaseDate).toISOString()
+
+        // Format date to ISO (assuming db has dateTime type)
+        const formattedDate = new Date(receipt.purchaseDate + ' ' + receipt.purchaseTime)
         
-        // Format time to number
+        // Format time to integer
         const formattedTime = Number(receipt.purchaseTime.split(':').join(''))
 
-        // Format total to number
+        // Format total to float
         const formattedTotal = parseFloat(receipt.total)
 
-        // Format item prices to number
+        // Format item prices to float
         const formattedItems = []
 
         for (const item of receipt.items) {
-            const formattedDescription = item.shortDescription
+            const formattedDescription = item.shortDescription.trim()
             const formattedPrice = Number(item.price)
 
             const formattedItem = {

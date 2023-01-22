@@ -5,23 +5,27 @@ import Utils from "../utils/utils"
 
 // Main function for calculating total points
 const calculatePoints = (receipt: Receipt) => {
-    if (!receipt || !receipt.items || !receipt.items.length) {
+    try {
+        if (!receipt || !receipt.items || !receipt.items.length) {
         console.log('Invalid receipt payload.')
         return 0
+        }
+        console.log('Calculating points...')
+        let totalPoints = 0
+
+        totalPoints += getPointsForRetailerName(receipt)
+        totalPoints += getPointsForRoundTotal(receipt)
+        totalPoints += getPointsForMultiple(receipt)
+        totalPoints += getPointsForDate(receipt)
+        totalPoints += getPointsForTimeRange(receipt)
+        totalPoints += getPointsForTotalItems(receipt.items)
+        totalPoints += getPointsForItemsDescription(receipt.items)
+
+        console.log('Total points: ', totalPoints)
+        return totalPoints
+    } catch(error: any) {
+        throw new Error(error.message)
     }
-
-    console.log('Starting points calculation...')
-    let totalPoints = 0
-
-    totalPoints += getPointsForRetailerName(receipt)
-    totalPoints += getPointsForRoundTotal(receipt)
-    totalPoints += getPointsForMultiple(receipt)
-    totalPoints += getPointsForDate(receipt)
-    totalPoints += getPointsForTimeRange(receipt)
-    totalPoints += getPointsForTotalItems(receipt.items)
-    totalPoints += getPointsForItemsDescription(receipt.items)
-
-    return totalPoints
 }
 
 // Helper functions to calculate points per specific fields and criteria
@@ -87,10 +91,10 @@ export const getPointsForMultiple = (receipt: Receipt, multiple: number = .25, p
     return points
 }
 
-// Assuming date is ISO string
+// Assuming date is ISO
 // Allow flag to change from odd and even
 export const getPointsForDate = (receipt: Receipt, points: number = Enum.defaultPoints.DAY, odd: boolean = true) => {
-    if (!receipt || !receipt.purchaseDate || !receipt.purchaseDate.length) {
+    if (!receipt || !receipt.purchaseDate || !(receipt.purchaseDate instanceof Date)) {
         console.log('Invalid receipt payload.')
         return 0
     }
@@ -115,9 +119,9 @@ export const getPointsForDate = (receipt: Receipt, points: number = Enum.default
     return 0
 }
 
-// Assuming time is ISO 8601 format
+// Assuming time is in military format as number
 export const getPointsForTimeRange = (receipt: Receipt, start: number = 1400, end: number = 1600, points: number = Enum.defaultPoints.TIMEOFPURCHASE) => {
-    if (!receipt || !receipt.purchaseTime || !receipt.purchaseTime) {
+    if (!receipt || !receipt.purchaseTime || typeof receipt.purchaseTime !== 'number') {
         console.log('Invalid receipt payload.')
         return 0
     }
@@ -167,12 +171,13 @@ export const getPointsForItemsDescription = (items: Item[], multiple: number = 3
         if (!item.shortDescription || !item.price) continue
 
         const { shortDescription, price } = item
+
+        // Trim in case record accidentally was saved in DB without trimming
         const trimmedDescription = shortDescription.trim()
-    
         const isMultiple = trimmedDescription.length % multiple === 0
     
         if (!isMultiple) {
-            console.log('0 points for item description.')
+            console.log(`0 points for item ${trimmedDescription}.`)
             continue
         }
         
@@ -180,13 +185,12 @@ export const getPointsForItemsDescription = (items: Item[], multiple: number = 3
 
         if (roundUp) {
             itemPoints = Math.ceil(price * multiplier)
-            console.log(`Adding ${itemPoints} points for item description.`)
-            points += itemPoints
         } else {
             itemPoints = Math.floor(price * multiplier)
-            console.log(`Adding ${price * multiplier} points for item description.`)
-            points += itemPoints
         }
+
+        console.log(`Adding ${itemPoints} points for ${trimmedDescription}.`)
+        points += itemPoints
     }
 
     return points

@@ -20,11 +20,9 @@ const processReceipt = (req: Request, res: Response) => {
         receipt.userID = Utils.getRandomID()
 
         // Check for duplicate record
-        console.log('Verifying receipt is not a duplicate...')
         const isNew = Helper.isNewReceipt(receipt)
 
         if (!isNew) {
-            console.log('Existing receipt record found.')
             res.json({ message: 'Existing receipt record found.' })
         }
 
@@ -32,25 +30,14 @@ const processReceipt = (req: Request, res: Response) => {
         const formattedReceipt: Receipt = Helper.formatReceipt(receipt)
 
         // Calculate points total
-        console.log('Calculating points...')
         formattedReceipt.points =  Helper.calculatePoints(formattedReceipt)
-        console.log('Total points: ', formattedReceipt.points)
 
         // Simulate querying for existing retailer record
-        // If retailer exists in db, add retailer ID
-        console.log('Checking if retailer record exists....')
-        formattedReceipt.retailerID = Utils.getRandomID()
-        console.log(`Retailer record found: ${receipt.retailerID}.`)
+        formattedReceipt.retailerID = Helper.findRetailer(formattedReceipt)
 
-        for (const item of formattedReceipt.items) {
+        for (let item of formattedReceipt.items) {
             // Simulate querying items collection for existing item/category
-            // If item/category exists in db, add values
-            console.log('Checking if item record exists...')
-            console.log(`Item record found: ${item.itemID}. Adding item id, category id, and category...`)
-            
-            item.itemID = Utils.getRandomID()
-            item.category = faker.commerce.product()
-            item.categoryID = Utils.getRandomID()
+            item = Helper.findItem(item)
         }
 
         console.log('Validating receipt before storing...')
@@ -68,7 +55,7 @@ const processReceipt = (req: Request, res: Response) => {
         
         res.json({ _id: formattedReceipt._id })
     } catch(error: any) {
-        console.log('Error processing receipts.')
+        console.error('Error processing receipts.')
         res.json({ message: error.message })
     }
 }

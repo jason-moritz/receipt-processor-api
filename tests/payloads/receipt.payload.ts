@@ -4,7 +4,7 @@ import Utils from '../../utils/utils'
 export const testReceipt1: Receipt = {
     userID: Utils.getRandomID(),
     retailer: 'Target',
-    purchaseDate: '2022-01-01T19:01:00.000Z',
+    purchaseDate: new Date('2022-01-01T19:01:00.000Z'),
     purchaseTime: 1301,
     items: [
       {
@@ -34,7 +34,7 @@ export const testReceipt1: Receipt = {
 export const testReceipt2: Receipt = {
     userID: Utils.getRandomID(),
     retailer: "M&M Corner Market",
-    purchaseDate: "2022-03-20T19:33:00.000Z",
+    purchaseDate: new Date('2022-03-20T19:33:00.000Z'),
     purchaseTime: 1433,
     items: [
       {
@@ -54,10 +54,10 @@ export const testReceipt2: Receipt = {
     total: 9.00
   }
 
-  export const badReceipt: Receipt = {
+  export const badReceipt: any = {
     userID: Utils.getRandomID(),
-    retailer: "",
-    purchaseDate: "",
+    retailer: '',
+    purchaseDate: '',
     purchaseTime: 2500,
     items: [],
     total: 0

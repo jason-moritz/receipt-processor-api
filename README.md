@@ -11,11 +11,13 @@ A simple webservice that exposes 2 routes: GET & POST. Users can upload receipts
 - Docker
 - Github CLI
 
-Once the repo has been cloned, cd into the cloned directory. in your terminal, run the following commands:
+1. Start docker desktop.
+
+2. Clone repp and cd into the cloned directory. In your terminal, run the following commands:
 
 `docker build . -t receipt-processor-api:1.0`
 
-This will build the initial image. To run the image, run the following command:
+3. This will build the initial image. To run the image, run the following command:
 
 `docker run -dp 3000:3000 receipt-processor-api:1.0`
 

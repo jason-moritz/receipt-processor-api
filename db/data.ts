@@ -43,7 +43,7 @@ export const insertData = (dataAmount: number) => {
                 userID: Utils.getRandomID(),
                 retailer: faker.company.name(),
                 retailerID: Utils.getRandomID(),
-                purchaseDate: moment().toISOString(),
+                purchaseDate: faker.date.recent(5, '2023-01-01T00:00:00.000Z'),
                 purchaseTime: Math.floor(Math.random() * 2399),
                 total: parseFloat(totalPrice.toFixed(2)),
                 items: items

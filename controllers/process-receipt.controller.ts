@@ -13,18 +13,17 @@ const processReceipt = (req: Request, res: Response) => {
         // Mimic trace logs
         console.log('Begin processing receipt...', JSON.stringify(receipt))
 
-        // Appending userID to mock metadata attached to receipt payload. 
-        receipt.userID = Utils.getRandomID()
-
-        // Check for duplicate record
-        const isNew = Helper.isNewReceipt(receipt)
-
-        if (!isNew) {
-            res.json({ message: 'Existing receipt record found.' })
-        }
-
         // Format receipt for db storage
         const formattedReceipt: Receipt = Helper.formatReceipt(receipt)
+        
+        // Check for duplicate record
+        const isNew = Helper.isNewReceipt(formattedReceipt)
+
+        if (!isNew) {
+            console.error('Exiting process...')
+            res.status(409).json({ message: 'Existing receipt record found.' })
+            return
+        }
 
         // Calculate points total
         formattedReceipt.points =  Helper.calculatePoints(formattedReceipt)
@@ -41,15 +40,16 @@ const processReceipt = (req: Request, res: Response) => {
         const validated = Schema.Receipt.validate(formattedReceipt)
         
         if (validated.error) {
-            res.json({ message: 'Failed final validation', error: validated.error })
+            console.error('Exiting proces...')
+            res.status(403).json({ message: 'Failed final validation.', error: validated.error })
+            return
         } 
         
-        console.log('Receipt successfully validated. Storing in db...', formattedReceipt)
-
         const newID = uuidv4()
         formattedReceipt._id = newID  
         totalReceipts[newID] = formattedReceipt
         
+        console.log('Receipt successfully validated. Storing in db...', formattedReceipt)
         res.json({ _id: formattedReceipt._id })
     } catch(error: any) {
         console.error('Error processing receipts.')

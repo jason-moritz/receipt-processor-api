@@ -4,8 +4,9 @@ import Schema from '../schemas/index.schema'
 import { Receipt , Item } from '../types/index.type'
 import Utils from '../utils/utils'
 import Helper from '../helper/index.helper'
+import { TotalReceipts } from '../interfaces/index.interface'
 
-const totalReceipts: any = {}
+const totalReceipts: TotalReceipts = {}
 
 // Function to "seed" the "database"
 export const insertData = (dataAmount: number) => {

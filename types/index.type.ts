@@ -20,7 +20,6 @@ export type Item = {
     price: number
 }
 
-
 export type Receipt = {
     _id?: string
     userID: string

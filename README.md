@@ -13,7 +13,7 @@ A simple webservice that exposes 2 routes: GET & POST. Users can upload receipts
 
 1. Start docker desktop.
 
-2. Clone repp and cd into the cloned directory. In your terminal, run the following commands:
+2. Clone repository and cd into the cloned directory. In your terminal, run the following commands:
 
 `docker build . -t receipt-processor-api:1.0`
 

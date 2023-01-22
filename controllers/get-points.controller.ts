@@ -11,16 +11,16 @@ const getPoints = (req: Request, res: Response) => {
         // Simulate DB call
         const receipt = totalReceipts[id]
         
-        if (receipt && receipt.points) {
-            console.log(`Record found for id ${id}.`, JSON.stringify(receipt))
-            res.json({ points: receipt.points })
-        } else {
+        if (!receipt) {
             console.log(`No record found for id ${id}.`)
             res.json({ message: `No record found for id ${id}.`})
         }
+        
+        console.log(`Record found for id ${id}.`, JSON.stringify(receipt))
+        res.json({ points: receipt.points })
     
     } catch(error: any) {
-        console.log(error.message)
+        console.error(error.message)
         res.json({ message: error.message })
     }
 }

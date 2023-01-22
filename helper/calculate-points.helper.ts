@@ -3,6 +3,7 @@ import { Item, Receipt } from "../types"
 import Enum from '../enums/index.enum'
 import Utils from "../utils/utils"
 
+// Main function for calculating total points
 const calculatePoints = (receipt: Receipt) => {
     if (!receipt || !receipt.items || !receipt.items.length) {
         console.log('Invalid receipt payload.')
@@ -37,16 +38,16 @@ export const getPointsForRetailerName = (receipt: Receipt) => {
     const { retailer } = receipt 
     const points = Utils.trimNonAlphanumeric(retailer).length
 
-    if (points) {
-        console.log(`Adding ${points} points for retailer name.`)
-    } else {
+    if (!points) {
         console.log('0 points for retailer name.')
+        return 0
     }
 
+    console.log(`Adding ${points} points for retailer name.`)
     return points
 }
 
-export const getPointsForRoundTotal = (receipt: Receipt, points: number = Enum.defaultPoints.roundedTotal) => {
+export const getPointsForRoundTotal = (receipt: Receipt, points: number = Enum.defaultPoints.ROUNDEDTOTAL) => {
     if (!receipt || !receipt.total) {
         console.log('Invalid receipt payload.')
         return 0
@@ -57,16 +58,16 @@ export const getPointsForRoundTotal = (receipt: Receipt, points: number = Enum.d
     const { total } = receipt
     const isRound = total > 0 && total % 1 === 0
 
-    if (isRound) {
-        console.log(`Adding ${points} points for rounded total.`)
-        return points
-    } else {
+    if (!isRound) {
         console.log('0 points for round total.')
         return 0
-    }
+    } 
+
+    console.log(`Adding ${points} points for rounded total.`)
+    return points
 }
 
-export const getPointsForMultiple = (receipt: Receipt, multiple: number = .25, points: number = Enum.defaultPoints.totalIsMultiple) => {
+export const getPointsForMultiple = (receipt: Receipt, multiple: number = .25, points: number = Enum.defaultPoints.TOTALISMULTIPLE) => {
     if (!receipt || !receipt.total) {
         console.log('Invalid receipt payload.')
         return 0
@@ -77,17 +78,18 @@ export const getPointsForMultiple = (receipt: Receipt, multiple: number = .25, p
     const { total } = receipt
     const isMultiple = total > 0 && total % multiple === 0
 
-    if (isMultiple) {
-        console.log(`Adding ${points} pts for multiple.`)
-        return points
-    } else {
+    if (!isMultiple) {
         console.log('0 points for multiple.')
         return 0
-    }
+    } 
+
+    console.log(`Adding ${points} pts for multiple.`)
+    return points
 }
 
-// Assuming date is format of YYYY-MM-DD as string
-export const getPointsForDate = (receipt: Receipt, points: number = Enum.defaultPoints.day, odd: boolean = true) => {
+// Assuming date is ISO string
+// Allow flag to change from odd and even
+export const getPointsForDate = (receipt: Receipt, points: number = Enum.defaultPoints.DAY, odd: boolean = true) => {
     if (!receipt || !receipt.purchaseDate || !receipt.purchaseDate.length) {
         console.log('Invalid receipt payload.')
         return 0
@@ -97,28 +99,24 @@ export const getPointsForDate = (receipt: Receipt, points: number = Enum.default
 
     const { purchaseDate } = receipt
     const dayAsNumber = Number(moment(purchaseDate).format('DD'))
+    const dayIsOdd = dayAsNumber % 2 !== 0
+
+    if (odd && dayIsOdd) {
+        console.log(`Adding ${points} pts for odd day.`)
+        return points
+    } 
     
-    if (odd) {
-        if (dayAsNumber % 2 !== 0) {
-            console.log(`Adding ${points} pts for odd day.`)
-            return points
-        } else {
-            console.log('0 points for odd day.')
-            return 0
-        }
-    } else {
-        if (dayAsNumber % 2 === 0) {
-            console.log(`Adding ${points} pts for even day.`)
-            return points
-        } else {
-            console.log('0 points for even day.')
-            return 0
-        }
+    if (!odd && !dayIsOdd) {
+        console.log(`Adding ${points} pts for even day.`)
+        return points
     }
+
+    console.log('0 points for odd day.')
+    return 0
 }
 
 // Assuming time is ISO 8601 format
-export const getPointsForTimeRange = (receipt: Receipt, start: number = 1400, end: number = 1600, points: number = Enum.defaultPoints.timeOfPurchase) => {
+export const getPointsForTimeRange = (receipt: Receipt, start: number = 1400, end: number = 1600, points: number = Enum.defaultPoints.TIMEOFPURCHASE) => {
     if (!receipt || !receipt.purchaseTime || !receipt.purchaseTime) {
         console.log('Invalid receipt payload.')
         return 0
@@ -129,17 +127,17 @@ export const getPointsForTimeRange = (receipt: Receipt, start: number = 1400, en
     const { purchaseTime } = receipt
     const isValidTime = purchaseTime > start && purchaseTime < end
 
-    if (isValidTime) {
-        console.log(`Adding ${points} pts for time range.`)
-        return points
-    } else {
+    if (!isValidTime) {
         console.log('0 points for time range.')
         return 0
     }
+    
+    console.log(`Adding ${points} pts for time range.`)
+    return points
 }
 
 // Items
-export const getPointsForTotalItems = (items: Item[], interval: number = 2, points: number = Enum.defaultPoints.itemCount) => {
+export const getPointsForTotalItems = (items: Item[], interval: number = 2, points: number = Enum.defaultPoints.ITEMCOUNT) => {
     if (!items || !items.length) {
         console.log('Invalid receipt payload.')
         return 0
@@ -148,13 +146,13 @@ export const getPointsForTotalItems = (items: Item[], interval: number = 2, poin
     const multiplier = Math.floor(items.length / interval)
     const isValidLength = multiplier > 0
 
-    if (isValidLength) {
-        console.log(`Adding ${points * multiplier} pts for total items.`)
-        return points * multiplier
-    } else {
+    if (!isValidLength) {
         console.log('0 points for total items.')
         return 0
-    }
+    } 
+    
+    console.log(`Adding ${points * multiplier} pts for total items.`)
+    return points * multiplier
 }
 
 export const getPointsForItemsDescription = (items: Item[], multiple: number = 3, multiplier: number = .2, roundUp: boolean = true) => {
@@ -173,16 +171,21 @@ export const getPointsForItemsDescription = (items: Item[], multiple: number = 3
     
         const isMultiple = trimmedDescription.length % multiple === 0
     
-        if (isMultiple) {
-            if (roundUp) {
-                console.log(`Adding ${price * multiplier} points for item description.`)
-                points += Math.ceil(price * multiplier)
-            } else {
-                console.log(`Adding ${price * multiplier} points for item description.`)
-                points += Math.floor(price * multiplier)
-            }
-        } else {
+        if (!isMultiple) {
             console.log('0 points for item description.')
+            continue
+        }
+        
+        let itemPoints = 0
+
+        if (roundUp) {
+            itemPoints = Math.ceil(price * multiplier)
+            console.log(`Adding ${itemPoints} points for item description.`)
+            points += itemPoints
+        } else {
+            itemPoints = Math.floor(price * multiplier)
+            console.log(`Adding ${price * multiplier} points for item description.`)
+            points += itemPoints
         }
     }
 

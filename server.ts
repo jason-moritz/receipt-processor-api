@@ -18,9 +18,6 @@ app.listen(PORT, () => {
     
     if (ENV === 'development') {
         console.log('Attempting to create seed data...')
-        const seedDataCount = insertData(10)
-        if (seedDataCount) {
-            console.log(`Successfully created ${seedDataCount} records.`)
-        }
+        insertData(10)
     }
 })

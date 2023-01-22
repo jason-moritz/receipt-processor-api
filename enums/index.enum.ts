@@ -1,4 +1,4 @@
-import defaultPoints from "./defaultPoints.enum";
+import defaultPoints from "./default-points.enum";
 
 export default {
     defaultPoints

@@ -13,9 +13,10 @@ const processReceipt = (req: Request, res: Response) => {
     try {
         const receipt = req.body
 
+        // Mimic trace logs
         console.log('Begin processing receipt...', JSON.stringify(receipt))
 
-        // Appending userID to mock metadata. Assuming only users are permitted to post and user ID is sent via metadata.
+        // Appending userID to mock metadata attached to receipt payload. 
         receipt.userID = Utils.getRandomID()
 
         // Check for duplicate record
@@ -42,34 +43,30 @@ const processReceipt = (req: Request, res: Response) => {
         console.log(`Retailer record found: ${receipt.retailerID}.`)
 
         for (const item of formattedReceipt.items) {
-            // Simulate querying for existing item/category
+            // Simulate querying items collection for existing item/category
+            // If item/category exists in db, add values
             console.log('Checking if item record exists...')
+            console.log(`Item record found: ${item.itemID}. Adding item id, category id, and category...`)
+            
             item.itemID = Utils.getRandomID()
-            console.log(`Item record found: ${item.itemID}.`)
-
-            console.log('Checking if item category record exists...')
             item.category = faker.commerce.product()
-            console.log(`Item category record found: ${item.category}.`)
-
-            console.log('Checking if record of category ID exists....')
             item.categoryID = Utils.getRandomID()
-            console.log(`Item categoryID record found: ${item.categoryID}.`)
         }
 
         console.log('Validating receipt before storing...')
         const validated = Schema.Receipt.validate(formattedReceipt)
         
-        if (!validated.error) {
-            console.log('Receipt successfully validated. Storing in db...', formattedReceipt)
-
-            const newID = uuidv4()
-            formattedReceipt._id = newID  
-            totalReceipts[newID] = formattedReceipt
-            
-            res.json({ _id: formattedReceipt._id })
-        } else {
+        if (validated.error) {
             res.json({ message: 'Failed final validation', error: validated.error })
-        }
+        } 
+        
+        console.log('Receipt successfully validated. Storing in db...', formattedReceipt)
+
+        const newID = uuidv4()
+        formattedReceipt._id = newID  
+        totalReceipts[newID] = formattedReceipt
+        
+        res.json({ _id: formattedReceipt._id })
     } catch(error: any) {
         console.log('Error processing receipts.')
         res.json({ message: error.message })

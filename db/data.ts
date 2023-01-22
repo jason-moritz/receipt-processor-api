@@ -11,6 +11,8 @@ const totalReceipts: TotalReceipts = {}
 // Function to "seed" the "database"
 export const insertData = (dataAmount: number) => {
     try {
+        console.log('Attempting to create seed data...')
+        
         for (let i = 0; i < dataAmount; i++) {
             // Build items for each receipt (range 1 - 5)
             const items = []

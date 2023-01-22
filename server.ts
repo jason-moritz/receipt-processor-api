@@ -17,7 +17,6 @@ app.listen(PORT, () => {
     console.log(`Express server running on port ${PORT}.`)
     
     if (ENV === 'development') {
-        console.log('Attempting to create seed data...')
         insertData(10)
     }
 })

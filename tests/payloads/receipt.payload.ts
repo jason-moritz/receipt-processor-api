@@ -1,4 +1,4 @@
-import { Receipt } from "../../types";
+import { Receipt } from "../../types/index.type";
 import Utils from '../../utils/utils'
 
 export const testReceipt1: Receipt = {

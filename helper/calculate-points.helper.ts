@@ -1,5 +1,5 @@
 import moment from 'moment'
-import { Item, Receipt } from "../types"
+import { Item, Receipt } from "../types/index.type"
 import Enum from '../enums/index.enum'
 import Utils from "../utils/utils"
 

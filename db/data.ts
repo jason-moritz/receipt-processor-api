@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid'
 import { faker } from '@faker-js/faker'
 import moment from 'moment'
 import Schema from '../schemas/index.schema'
-import { Receipt , Item } from '../types/index'
+import { Receipt , Item } from '../types/index.type'
 import Utils from '../utils/utils'
 import Helper from '../helper/index.helper'
 

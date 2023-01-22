@@ -1,4 +1,4 @@
-import { ReceiptPayload } from "../types";
+import { ReceiptPayload } from "../types/index.type";
 import moment from 'moment'
 
 const formatReceipt = (receipt: ReceiptPayload) => {

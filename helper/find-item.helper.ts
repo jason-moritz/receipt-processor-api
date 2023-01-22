@@ -1,5 +1,5 @@
 import { faker } from "@faker-js/faker";
-import { Item } from "../types";
+import { Item } from "../types/index.type";
 import Utils from '../utils/utils'
 
 const findItem = (item: Item) => {

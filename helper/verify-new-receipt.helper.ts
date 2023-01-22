@@ -1,5 +1,5 @@
 import totalReceipts from "../db/data";
-import { Receipt } from "../types";
+import { Receipt } from "../types/index.type";
 
 // This method would be different if DB was involved as we could compare user id, retailer and date/time if indexed.
 const isNewReceipt = (receipt: Receipt) => {

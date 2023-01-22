@@ -6,7 +6,7 @@ import totalReceipts from '../db/data'
 import formatReceipt from '../helper/format-receipt.helper'
 import Helper from '../helper/index.helper'
 import Schema from '../schemas/index.schema'
-import { Receipt } from '../types'
+import { Receipt } from '../types/index.type'
 import Utils from '../utils/utils'
 
 const processReceipt = (req: Request, res: Response) => {

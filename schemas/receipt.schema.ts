@@ -1,8 +1,7 @@
 import Joi from 'joi'
 import Item from './item.schema'
-// Assumed for only purchases, not including returns creating a negative total amount.
 
-
+// Assumed for purchases only, not including returns creating a negative total amount.
 const Receipt = Joi.object({
     _id: Joi.string(),
     userID: Joi.string().required(),

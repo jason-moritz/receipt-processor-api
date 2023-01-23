@@ -5,7 +5,7 @@ import totalReceipts from '../db/data'
 const getReceipts = (req: Request, res: Response) => {
     try {
         if (!Object.keys(totalReceipts).length) {
-            res.json({ message: 'No receipts found.'})
+            return res.json({ message: 'No receipts found.'})
         }
 
         // If utilizing a DB, would add offset and limit parameters for pagination > db.collection.skip(offset).limit(limit)

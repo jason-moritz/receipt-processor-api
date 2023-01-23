@@ -13,7 +13,7 @@ const getPoints = (req: Request, res: Response) => {
         
         if (!receipt) {
             console.log(`No record found for id ${id}.`)
-            res.json({ message: `No record found for id ${id}.`})
+            return res.json({ message: `No record found for id ${id}.`})
         }
         
         console.log(`Record found for id ${id}.`, JSON.stringify(receipt))

@@ -21,8 +21,7 @@ const processReceipt = (req: Request, res: Response) => {
 
         if (!isNew) {
             console.error('Exiting process...')
-            res.status(409).json({ message: 'Existing receipt record found.' })
-            return
+            return res.status(409).json({ message: 'Existing receipt record found.' })
         }
 
         // Calculate points total
@@ -41,8 +40,7 @@ const processReceipt = (req: Request, res: Response) => {
         
         if (validated.error) {
             console.error('Exiting proces...')
-            res.status(403).json({ message: 'Failed final validation.', error: validated.error })
-            return
+            return res.status(403).json({ message: 'Failed final validation.', error: validated.error })
         } 
         
         const newID = uuidv4()

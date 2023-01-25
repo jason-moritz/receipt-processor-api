@@ -32,7 +32,7 @@ A simple webservice that exposes 2 routes: GET & POST. Users can upload receipts
 
 ### Endpoint: Process Receipts
 
-- Path: `/receipts/process`
+- Path: `api/v1/receipts/process`
 - Method: `POST`
 - Payload: Receipt JSON
 - Response: JSON containing an id for the receipt.
@@ -56,7 +56,7 @@ Example Response:
 
 ## Endpoint: Get Points
 
-- Path: `/receipts/{id}/points`
+- Path: `api/v1/receipts/{id}/points`
 - Method: `GET`
 - Response: A JSON object containing the number of points awarded.
 
